@@ -21,4 +21,13 @@ public class PanelChat extends JPanel {
 
         add(new JScrollPane(txtChat), BorderLayout.CENTER);
     }
+
+    public void agregarMensaje(String mensaje) {
+        String textoAnterior = txtChat.getText();
+        txtChat.setText(textoAnterior + mensaje + "\n");
+    }
+
+    public void limpiar() {
+        txtChat.setText("");
+    }
 }
