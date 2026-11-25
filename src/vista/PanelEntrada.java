@@ -9,6 +9,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import modelo.Agent;
+
 public class PanelEntrada extends JPanel implements ActionListener {
 
     private JTextField txtMensaje;
@@ -42,7 +44,20 @@ public class PanelEntrada extends JPanel implements ActionListener {
             String texto = txtMensaje.getText();
             if (!texto.isEmpty()) {
                 pnlChat.agregarMensaje("jaimeme: " + texto);
+                pnlChat.agregarMensaje("...");
                 txtMensaje.setText("");
+
+                new Thread(() -> {
+                    try {
+                        Agent agent = new Agent("jimi");
+                        String respuesta = agent.chatear(texto);
+                        pnlChat.quitarCargando();
+                        pnlChat.agregarMensaje("ia: " + respuesta);
+                    } catch (Exception error) {
+                        pnlChat.agregarMensaje("Error: no se pudo obtener la respuesta (" + error + ")");
+                    }
+                }).start();
+                
             }
         } else if (e.getSource() == btnLimpiar) {
             pnlChat.limpiar();

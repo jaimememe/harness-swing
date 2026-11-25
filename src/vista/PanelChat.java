@@ -27,6 +27,12 @@ public class PanelChat extends JPanel {
         txtChat.setText(textoAnterior + mensaje + "\n");
     }
 
+    public void quitarCargando() {
+        String textoAnterior = txtChat.getText();
+        txtChat.setText(textoAnterior.replace("...\n", ""));
+    }
+
+
     public void limpiar() {
         txtChat.setText("");
     }
