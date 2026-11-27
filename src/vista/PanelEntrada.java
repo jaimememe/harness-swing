@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import modelo.Agent;
 
@@ -17,9 +18,11 @@ public class PanelEntrada extends JPanel implements ActionListener {
     private JButton btnEnviar;
     private JButton btnLimpiar;
     private PanelChat pnlChat;
+    private PanelAgentes ventanaAgente;
 
-    public PanelEntrada(PanelChat pnlChat) {
+    public PanelEntrada(PanelChat pnlChat, PanelAgentes ventanaAgente) {
         this.pnlChat = pnlChat;
+        this.ventanaAgente = ventanaAgente;
 
         setLayout(new BorderLayout());
 
@@ -36,16 +39,41 @@ public class PanelEntrada extends JPanel implements ActionListener {
 
         add(txtMensaje, BorderLayout.CENTER);
         add(pnlBotones, BorderLayout.EAST);
+        SwingUtilities.invokeLater(() ->{
+            getRootPane().setDefaultButton(btnEnviar);
+            txtMensaje.requestFocusInWindow();
+        });
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        String Seleccionado = ventanaAgente.getAgenteSeleccionado();
-        if (Seleccionado == null) {
-            pnlChat.agregarMensaje("Error: no se ha seleccionado un agente.");
+        if (ventanaAgente.getAgenteSeleccionado() == null) {
+            pnlChat.agregarMensaje("Error: primero selecciona un agente.");
             return;
         }
-        else{
-            
+
+        if (e.getSource() == btnEnviar) {
+            String texto = txtMensaje.getText();
+            if (!texto.isEmpty()) {
+                pnlChat.agregarMensaje("jaimeme: " + texto);
+                pnlChat.agregarMensaje("...");
+                txtMensaje.setText("");
+                txtMensaje.requestFocus();
+                new Thread(() -> {
+                    try {
+                        Agent agent = new Agent(ventanaAgente.getAgenteSeleccionado());
+                        String respuesta = agent.chatear(texto);
+                        pnlChat.quitarCargando();
+                        pnlChat.agregarMensaje("ia: " + respuesta);
+                    } catch (Exception error) {
+                        pnlChat.agregarMensaje("Error: no se pudo obtener la respuesta (" + error + ")");
+                    }
+                }).start();
+                
+            }
+        } else if (e.getSource() == btnLimpiar) {
+            pnlChat.limpiar();
+        }
     }
+     
 }

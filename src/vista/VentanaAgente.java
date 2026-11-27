@@ -12,6 +12,7 @@ public class VentanaAgente extends JFrame {
     private PanelEntrada pnlEntrada;
 
     public VentanaAgente() {
+   
         setTitle("Agente IA");
         setSize(1000, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -19,9 +20,9 @@ public class VentanaAgente extends JFrame {
         setLayout(new BorderLayout());
 
         pnlEncabezado = new PanelEncabezado();
-        pnlAgentes = new PanelAgentes();
         pnlChat = new PanelChat();
-        pnlEntrada = new PanelEntrada(pnlChat);
+        pnlAgentes = new PanelAgentes(pnlChat);
+        pnlEntrada = new PanelEntrada(pnlChat, pnlAgentes);
 
         add(pnlEncabezado, BorderLayout.NORTH);
         add(pnlAgentes, BorderLayout.WEST);
