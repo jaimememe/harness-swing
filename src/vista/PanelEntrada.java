@@ -40,27 +40,12 @@ public class PanelEntrada extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == btnEnviar) {
-            String texto = txtMensaje.getText();
-            if (!texto.isEmpty()) {
-                pnlChat.agregarMensaje("jaimeme: " + texto);
-                pnlChat.agregarMensaje("...");
-                txtMensaje.setText("");
-
-                new Thread(() -> {
-                    try {
-                        Agent agent = new Agent("jimi");
-                        String respuesta = agent.chatear(texto);
-                        pnlChat.quitarCargando();
-                        pnlChat.agregarMensaje("ia: " + respuesta);
-                    } catch (Exception error) {
-                        pnlChat.agregarMensaje("Error: no se pudo obtener la respuesta (" + error + ")");
-                    }
-                }).start();
-                
-            }
-        } else if (e.getSource() == btnLimpiar) {
-            pnlChat.limpiar();
+        String Seleccionado = ventanaAgente.getAgenteSeleccionado();
+        if (Seleccionado == null) {
+            pnlChat.agregarMensaje("Error: no se ha seleccionado un agente.");
+            return;
         }
+        else{
+            
     }
 }
