@@ -19,10 +19,12 @@ public class PanelEntrada extends JPanel implements ActionListener {
     private JButton btnLimpiar;
     private PanelChat pnlChat;
     private PanelAgentes ventanaAgente;
+    private PanelEncabezado pnlEncabezado;
 
-    public PanelEntrada(PanelChat pnlChat, PanelAgentes ventanaAgente) {
+    public PanelEntrada(PanelChat pnlChat, PanelAgentes ventanaAgente, PanelEncabezado pnlEncabezado) {
         this.pnlChat = pnlChat;
         this.ventanaAgente = ventanaAgente;
+        this.pnlEncabezado = pnlEncabezado;
 
         setLayout(new BorderLayout());
 
@@ -56,13 +58,25 @@ public class PanelEntrada extends JPanel implements ActionListener {
             String texto = txtMensaje.getText();
             if (!texto.isEmpty()) {
                 pnlChat.agregarMensaje("jaimeme: " + texto);
+
+                // Si hay un archivo elegido, su contenido se agrega al mensaje para la IA
+                String mensajeParaIA = texto;
+                if (pnlEncabezado.getArchivoSeleccionado() != null) {
+                    String nombreArchivo = pnlEncabezado.getArchivoSeleccionado().getName();
+                    mensajeParaIA = texto + "\n\nContenido del archivo " + nombreArchivo + ":\n"
+                            + pnlEncabezado.getContenidoArchivo();
+                    pnlChat.agregarMensaje("(archivo adjunto: " + nombreArchivo + ")");
+                    pnlEncabezado.limpiarArchivo(); // se envía una sola vez
+                }
+                String mensajeFinal = mensajeParaIA; // el Thread necesita una variable que no cambie
+
                 pnlChat.agregarMensaje("...");
                 txtMensaje.setText("");
                 txtMensaje.requestFocus();
                 new Thread(() -> {
                     try {
                         Agent agent = new Agent(ventanaAgente.getAgenteSeleccionado());
-                        String respuesta = agent.chatear(texto);
+                        String respuesta = agent.chatear(mensajeFinal);
                         pnlChat.quitarCargando();
                         pnlChat.agregarMensaje("ia: " + respuesta);
                     } catch (Exception error) {

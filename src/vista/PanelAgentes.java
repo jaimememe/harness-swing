@@ -38,8 +38,8 @@ public class PanelAgentes extends JPanel implements ListSelectionListener, Actio
         setBorder(BorderFactory.createTitledBorder("Agentes"));
         setPreferredSize(new Dimension(200, 0));
 
-        // Un DefaultListModel permite agregar elementos a la lista después de crearla.
-        // La llenamos con el nombre de cada carpeta que hay dentro de agentes/
+        // un DefaultListModel permite agregar elementos a la lista después de crearla.
+        // la lleniu con el nombre de cada carpeta que hay dentro de agentes
         modeloLista = new DefaultListModel<String>();
         File[] carpetas = new File("agentes").listFiles();
         if (carpetas != null) {
@@ -63,7 +63,6 @@ public class PanelAgentes extends JPanel implements ListSelectionListener, Actio
         return lstAgentes.getSelectedValue();
     }
 
-    // se ejecuta cada vez que se selecciona otro agente en la lista
     @Override
     public void valueChanged(ListSelectionEvent e) {
         // mientras el usuario arrastra el mouse llegan varios eventos; esperamos al último
@@ -88,11 +87,8 @@ public class PanelAgentes extends JPanel implements ListSelectionListener, Actio
             }
         }
     }
-
-    // se ejecuta al presionar "Nuevo agente"
     @Override
     public void actionPerformed(ActionEvent e) {
-        // Armamos la pequeña ventana: un campo para el nombre y otro para el SYSTEM
         JTextField txtNombre = new JTextField();
         JTextArea txtSystem = new JTextArea(8, 30);
         txtSystem.setLineWrap(true);
@@ -110,7 +106,7 @@ public class PanelAgentes extends JPanel implements ListSelectionListener, Actio
         int opcion = JOptionPane.showConfirmDialog(this, formulario, "Nuevo agente",
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (opcion != JOptionPane.OK_OPTION) {
-            return; // el usuario canceló
+            return;
         }
 
         String nombre = txtNombre.getText().trim();
@@ -127,7 +123,7 @@ public class PanelAgentes extends JPanel implements ListSelectionListener, Actio
                 return;
             }
             modeloLista.addElement(nombre);
-            lstAgentes.setSelectedValue(nombre, true); // lo seleccionamos para empezar a chatear
+            lstAgentes.setSelectedValue(nombre, true);
         } catch (Exception error) {
             JOptionPane.showMessageDialog(this, "No se pudo crear el agente (" + error + ")");
         }

@@ -22,7 +22,7 @@ public class VentanaAgente extends JFrame {
         pnlEncabezado = new PanelEncabezado();
         pnlChat = new PanelChat();
         pnlAgentes = new PanelAgentes(pnlChat);
-        pnlEntrada = new PanelEntrada(pnlChat, pnlAgentes);
+        pnlEntrada = new PanelEntrada(pnlChat, pnlAgentes, pnlEncabezado);
 
         add(pnlEncabezado, BorderLayout.NORTH);
         add(pnlAgentes, BorderLayout.WEST);

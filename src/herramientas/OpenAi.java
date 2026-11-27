@@ -109,12 +109,4 @@ public class OpenAi {
         }
         return valor;
     }
-
-    // Prueba sin la ventana
-    public static void main(String[] args) throws Exception {
-        String ruta = "agentes/jimi/config.json";
-        if (args.length > 0) {
-            ruta = args[0];
-        }
-    }
 }
